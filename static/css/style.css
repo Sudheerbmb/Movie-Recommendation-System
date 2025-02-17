@@ -1,0 +1,168 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #111; /* Dark background */
+    color: #f1c40f; /* Yellow text */
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background-color: #222; /* Dark header */
+    color: #f1c40f; /* Yellow text */
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.2em;
+}
+
+footer {
+    background-color: #222; /* Dark footer */
+    color: #f1c40f; /* Yellow text */
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+}
+
+footer p {
+    font-size: 1em;
+}
+
+/* Content Section */
+.content {
+    padding: 40px 0;
+}
+
+h2 {
+    text-align: center;
+    color: #f1c40f;
+    margin-bottom: 30px;
+}
+
+/* Form Section */
+.form-section {
+    background-color: #333; /* Dark form background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.form-section h3 {
+    font-size: 1.8em;
+    color: #f1c40f;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    color: #f1c40f;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #f1c40f; /* Yellow border */
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background-color: #444; /* Dark input background */
+    color: #f1c40f; /* Yellow text */
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+    border-color: #e67e22; /* Darker yellow on focus */
+    outline: none;
+    box-shadow: 0 0 5px rgba(230, 126, 34, 0.3);
+}
+
+button.btn {
+    background-color: #f1c40f; /* Yellow button */
+    color: #111; /* Dark text */
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button.btn:hover {
+    background-color: #e67e22; /* Darker yellow on hover */
+}
+
+/* Results Section */
+.results-section {
+    background-color: #333; /* Dark results section */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
+
+.results-section h3 {
+    font-size: 2em;
+    color: #f1c40f;
+    margin-bottom: 20px;
+}
+
+.movie-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.movie-item {
+    background-color: #444; /* Dark movie item background */
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.movie-item strong {
+    font-size: 18px;
+    display: block;
+    margin-bottom: 8px;
+    color: #f1c40f; /* Yellow text */
+}
+
+.movie-item p {
+    font-size: 16px;
+    color: #ecf0f1; /* Light text */
+}
+
+a.btn {
+    display: inline-block;
+    background-color: #f1c40f;
+    color: #111;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+a.btn:hover {
+    background-color: #e67e22; /* Darker yellow on hover */
+}
