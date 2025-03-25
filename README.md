@@ -1,41 +1,93 @@
-* **Collaborative Filtering (SVD):**
-    * Unearth hidden gems based on user ratings. We employ Singular Value Decomposition (SVD) to predict your cinematic soulmate films. 💖
-    * Input your `userId` and witness the magic!
-* **Content-Based Filtering (TF-IDF):**
-    * Discover movies that resonate with your favorite genres. We leverage TF-IDF and cosine similarity to find films that share the essence of your chosen title. 🎭
-    * Input a `movieTitle` and let the recommendations roll!
+# Movie Recommendation System
 
-**How to Conjure the Recommendations:**
+## Overview
+This is a Flask-based Movie Recommendation System that uses **Collaborative Filtering** (SVD) and **Content-Based Filtering** (TF-IDF with cosine similarity) to recommend movies based on user preferences and movie genres.
 
-1.  **Clone the Repository:** `git clone [repository_url]`
-2.  **Install the Cast:** `pip install Flask scikit-learn pandas surprise`
-3.  **Prepare the Stage:** Place your `ratings.csv` and `movies.csv` files in the same directory as `app.py`.
-4.  **Begin the Show:** `python app.py`
-5.  **Enter the Theatre:** Open your browser and navigate to `http://127.0.0.1:5000/`.
-6.  **Choose Your Adventure:**
-    * For collaborative recommendations, enter a `userId`.
-    * For content-based recommendations, enter a `movieTitle`.
-7.  **Let the Reels Roll!** Receive your personalized movie recommendations. 🎥
+## Features
+- **Collaborative Filtering** using Singular Value Decomposition (SVD) from Surprise library.
+- **Content-Based Filtering** using TF-IDF vectorization and cosine similarity.
+- **Flask Web Interface** for user interaction.
+- **Movie rating-based predictions** for personalized recommendations.
+- **Genre-based similarity recommendations.**
 
-**Technical Breakdown (Behind the Curtain):**
+## Technologies Used
+- **Python** (Flask, Pandas, Scikit-learn, Surprise, Numpy)
+- **Machine Learning** (Collaborative Filtering, TF-IDF, Cosine Similarity)
+- **HTML, CSS, JavaScript** (for the web-based UI)
 
-* **Collaborative Filtering:**
-    * Utilizes the `surprise` library for SVD, a powerful matrix factorization technique.
-    * Trains a model on user-movie ratings to predict unseen ratings.
-* **Content-Based Filtering:**
-    * Employs `sklearn`'s `TfidfVectorizer` to convert movie genres into a numerical representation.
-    * Calculates cosine similarity to find movies with similar genre profiles.
+## Installation
+### Prerequisites
+Ensure you have the following installed:
+- Python 3.x
+- pip (Python package manager)
 
-**Why Choose ReelRec?**
+### Setup Steps
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/movie-recommender.git
+   cd movie-recommender
+   ```
+2. Install dependencies:
+   ```bash
+   pip install flask pandas scikit-learn surprise
+   ```
+3. Ensure you have `ratings.csv` and `movies.csv` datasets in the project directory.
 
-* **Dual Recommendation Power:** Enjoy the best of both worlds with collaborative and content-based filtering. 🌐
-* **User-Friendly Interface:** Simple and intuitive web interface powered by Flask. 💻
-* **Efficient and Accurate:** Leveraging proven algorithms for reliable recommendations. ✅
+4. Run the Flask application:
+   ```bash
+   python app.py
+   ```
+5. Open your browser and go to:
+   ```
+   http://127.0.0.1:5000/
+   ```
 
-**Contributing (Join the Crew):**
+## Usage
+1. Open the web interface.
+2. Enter your **User ID** to get personalized recommendations using **Collaborative Filtering**.
+3. Enter a **Movie Title** to get similar movies using **Content-Based Filtering**.
 
-Feel free to enhance ReelRec with new features, optimizations, or improvements. Fork the repository and submit your pull requests. Let's make movie discovery magical! 🤝
+## API Endpoints
+### `GET /`
+Renders the web-based UI.
 
-**Disclaimer (The Credits):**
+### `POST /collaborative_recommend`
+Generates recommendations based on user ratings using **SVD**.
+- **Request Body:**
+  ```json
+  { "userId": 1 }
+  ```
+- **Response:**
+  ```json
+  [
+    { "title": "Movie A", "predicted_rating": 4.5 },
+    { "title": "Movie B", "predicted_rating": 4.3 }
+  ]
+  ```
 
-This application relies on the `ratings.csv` and `movies.csv` datasets. Ensure data integrity for optimal performance. ⚠️
+### `POST /content_recommend`
+Generates recommendations based on movie similarity using **TF-IDF & Cosine Similarity**.
+- **Request Body:**
+  ```json
+  { "movieTitle": "Inception" }
+  ```
+- **Response:**
+  ```json
+  [
+    "Interstellar",
+    "The Matrix",
+    "Shutter Island"
+  ]
+  ```
+
+## Troubleshooting
+- Ensure the dataset files (`ratings.csv` & `movies.csv`) are correctly placed.
+- Check Python dependencies using `pip freeze`.
+- If Flask fails to start, verify that port 5000 is not in use.
+
+## License
+This project is licensed under the MIT License.
+
+## Author
+**Your Name**  
+GitHub: [Sudheerbmb](https://github.com/yourusername)
