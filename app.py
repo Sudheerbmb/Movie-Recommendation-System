@@ -3,16 +3,15 @@ import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from collections import defaultdict, deque
 import heapq
 
 app = Flask(__name__)
 
 # ================== Load Data ==================
-ratings = pd.read_csv("ratings.csv")  # userId, movieId, rating
-movies = pd.read_csv("movies.csv")    # movieId, title, genres
+ratings = pd.read_csv("ratings.csv")
+movies = pd.read_csv("movies.csv")
 
-# ================== Collaborative Filtering (Matrix Factorization) ==================
+# ================== Collaborative Filtering ==================
 user_movie_matrix = ratings.pivot(index="userId", columns="movieId", values="rating").fillna(0)
 U, sigma, Vt = np.linalg.svd(user_movie_matrix, full_matrices=False)
 sigma = np.diag(sigma)
@@ -42,54 +41,49 @@ def get_content_based_recommendations(title, movies_df, cosine_sim_matrix, n=10)
     title = title.strip().lower()
     matching_movies = movies_df[movies_df["title"].str.lower() == title]
     if matching_movies.empty:
-        return ["Movie not found in the database. Please try another title."]
+        return ["Movie not found."]
     idx = matching_movies.index[0]
     sim_scores = list(enumerate(cosine_sim_matrix[idx]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
     top_n_movies = [movies_df.iloc[i[0]].title for i in sim_scores[1:n+1]]
     return top_n_movies
 
-# ================== DSA-Based Recommendations (Graph + BFS + Heap) ==================
-graph = defaultdict(list)
-movie_genres = {}
-
-for _, row in movies.iterrows():
-    movie_id = row["movieId"]
-    genres = row["genres"].split("|") if pd.notna(row["genres"]) else []
-    movie_genres[movie_id] = genres
-    for genre in genres:
-        graph[genre].append(movie_id)
+# ================== Improved DSA-Based Recommendations ==================
+movie_ids = movies["movieId"].values
+movie_index_map = {movie_id: idx for idx, movie_id in enumerate(movie_ids)}
+genre_tfidf = TfidfVectorizer()
+genre_matrix = genre_tfidf.fit_transform(movies["genres"].fillna(""))
+genre_cosine_sim = cosine_similarity(genre_matrix)
+avg_ratings = ratings.groupby("movieId")["rating"].mean().to_dict()
 
 def get_dsa_based_recommendations(title, movies_df, ratings_df, n=10):
     title = title.strip().lower()
     matching_movies = movies_df[movies_df["title"].str.lower() == title]
     if matching_movies.empty:
-        return ["Movie not found in the database. Please try another title."]
-    movie_id = matching_movies.iloc[0]["movieId"]
-
-    if movie_id not in movie_genres:
-        return ["No genre information available for this movie."]
-
-    genres = movie_genres[movie_id]
-    visited = set()
-    candidate_movies = []
-
-    for genre in genres:
-        queue = deque(graph[genre])
-        while queue:
-            neighbor = queue.popleft()
-            if neighbor != movie_id and neighbor not in visited:
-                visited.add(neighbor)
-                avg_rating = ratings_df[ratings_df.movieId == neighbor]["rating"].mean()
-                if not np.isnan(avg_rating):
-                    heapq.heappush(candidate_movies, (-avg_rating, neighbor))
-
+        return ["Movie not found."]
+    
+    start_movie = matching_movies.iloc[0]["movieId"]
+    start_idx = movie_index_map[start_movie]
+    visited = set([start_movie])
+    
+    # Max-heap: (-score, movieId)
+    heap = []
+    
+    for idx, m_id in enumerate(movie_ids):
+        if m_id != start_movie:
+            similarity = genre_cosine_sim[start_idx][idx]
+            rating = avg_ratings.get(m_id, 0)
+            score = similarity * rating
+            heapq.heappush(heap, (-score, m_id))
+    
     recommendations = []
-    while candidate_movies and len(recommendations) < n:
-        _, m_id = heapq.heappop(candidate_movies)
-        movie_name = movies_df[movies_df.movieId == m_id].title.values[0]
-        recommendations.append(movie_name)
-
+    while heap and len(recommendations) < n:
+        _, m_id = heapq.heappop(heap)
+        if m_id not in visited:
+            visited.add(m_id)
+            movie_name = movies_df[movies_df.movieId == m_id].title.values[0]
+            recommendations.append(movie_name)
+    
     return recommendations if recommendations else ["No recommendations found."]
 
 # ================== Routes ==================
@@ -97,35 +91,16 @@ def get_dsa_based_recommendations(title, movies_df, ratings_df, n=10):
 def home():
     return render_template("index.html")
 
-@app.route("/collaborative_recommend", methods=["POST"])
-def collaborative_recommend():
+@app.route("/compare", methods=["POST"])
+def compare_recommendations():
     user_id = int(request.form["userId"])
-    recommendations = get_collaborative_based_recommendations(userId=user_id, movies_df=movies, n=10)
-    recommendations_html = "<h2>Top 10 Collaborative Filtering Recommendations</h2><ul>"
-    for movie, rating in recommendations:
-        recommendations_html += f"<li>{movie}: Predicted Rating {rating:.2f}</li>"
-    recommendations_html += "</ul><a href='/'>Back to Home</a>"
-    return recommendations_html
-
-@app.route("/content_recommend", methods=["POST"])
-def content_recommend():
     movie_title = request.form["movieTitle"]
-    recommendations = get_content_based_recommendations(movie_title, movies, cosine_sim, n=10)
-    recommendations_html = "<h2>Top 10 Content-Based Recommendations</h2><ul>"
-    for movie in recommendations:
-        recommendations_html += f"<li>{movie}</li>"
-    recommendations_html += "</ul><a href='/'>Back to Home</a>"
-    return recommendations_html
 
-@app.route("/dsa_recommend", methods=["POST"])
-def dsa_recommend():
-    movie_title = request.form["movieTitleDSA"]
-    recommendations = get_dsa_based_recommendations(movie_title, movies, ratings, n=10)
-    recommendations_html = "<h2>Top 10 DSA-Based Recommendations</h2><ul>"
-    for movie in recommendations:
-        recommendations_html += f"<li>{movie}</li>"
-    recommendations_html += "</ul><a href='/'>Back to Home</a>"
-    return recommendations_html
+    collaborative = get_collaborative_based_recommendations(user_id, movies, n=10)
+    content = get_content_based_recommendations(movie_title, movies, cosine_sim, n=10)
+    dsa = get_dsa_based_recommendations(movie_title, movies, ratings, n=10)
+
+    return render_template("results.html", collaborative=collaborative, content=content, dsa=dsa)
 
 if __name__ == "__main__":
     app.run(debug=True)

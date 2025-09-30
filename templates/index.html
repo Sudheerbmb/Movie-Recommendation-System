@@ -1,78 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Corporate Movie Recommendation System</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; background-color: #111; color: #f1c40f; line-height: 1.6; overflow-x: hidden; animation: fadeIn 2s ease-in-out; }
-        header { background-color: #222; color: #f1c40f; padding: 20px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); background-image: url('https://www.transparenttextures.com/patterns/black-linen.png'); animation: moveUp 2s ease-in-out forwards; }
-        header h1 { font-size: 2.5em; margin-bottom: 10px; }
-        header p { font-size: 1.2em; }
-        .container { width: 90%; margin: 0 auto; padding: 20px; animation: slideIn 2s ease-out forwards; }
-        h2 { text-align: center; margin-bottom: 30px; }
-        .form-section { background-color: #333; padding: 20px; border-radius: 8px; margin-bottom: 30px; background-image: url('https://www.transparenttextures.com/patterns/diamond-pattern.png'); animation: slideUp 2s ease-in-out forwards; }
-        h3 { font-size: 1.8em; margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; }
-        input[type="text"], input[type="number"] { width: 100%; padding: 12px; font-size: 16px; border: 1px solid #f1c40f; border-radius: 5px; margin-bottom: 20px; background-color: #444; color: #f1c40f; }
-        button { background-color: #f1c40f; color: #111; border: none; padding: 12px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease, transform 0.3s ease; }
-        button:hover { background-color: #d4ac0d; transform: scale(1.1); }
-        ul { list-style-type: none; padding: 0; }
-        li { background-color: #444; padding: 15px; margin: 10px 0; border-radius: 5px; transition: transform 0.3s ease; }
-        li:hover { transform: scale(1.05); background-color: #555; }
-        strong { font-size: 18px; color: #f1c40f; }
-        a { display: inline-block; background-color: #f1c40f; color: #111; padding: 12px 20px; text-decoration: none; border-radius: 5px; margin-top: 20px; }
-        a:hover { background-color: #d4ac0d; transform: scale(1.1); }
-        footer { background-color: #222; color: #f1c40f; text-align: center; padding: 15px; margin-top: 40px; background-image: url('https://www.transparenttextures.com/patterns/black-linen.png'); animation: fadeIn 3s ease-in-out forwards; }
-        @keyframes moveUp { 0%{transform:translateY(0)}100%{transform:translateY(-10px)} }
-        @keyframes fadeIn { 0%{opacity:0}100%{opacity:1} }
-        @keyframes slideIn { 0%{transform:translateX(-100%)}100%{transform:translateX(0)} }
-        @keyframes slideUp { 0%{transform:translateY(30px);opacity:0}100%{transform:translateY(0);opacity:1} }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corporate Movie Recommendation System</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Arial', sans-serif; background-color: #111; color: #f1c40f; line-height: 1.6; }
+header { background-color: #222; color: #f1c40f; padding: 20px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+header h1 { font-size: 2.5em; margin-bottom: 10px; }
+header p { font-size: 1.2em; }
+.container { width: 90%; margin: 0 auto; padding: 20px; }
+h2 { text-align: center; margin-bottom: 30px; }
+.form-section { background-color: #333; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+h3 { font-size: 1.8em; margin-bottom: 20px; }
+label { display: block; margin-bottom: 8px; }
+input[type="text"], input[type="number"] { width: 100%; padding: 12px; font-size: 16px; border: 1px solid #f1c40f; border-radius: 5px; margin-bottom: 20px; background-color: #444; color: #f1c40f; }
+button { background-color: #f1c40f; color: #111; border: none; padding: 12px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; }
+button:hover { background-color: #d4ac0d; transform: scale(1.05); }
+footer { background-color: #222; color: #f1c40f; text-align: center; padding: 15px; margin-top: 40px; }
+</style>
 </head>
 <body>
-    <header>
-        <h1>Corporate Movie Recommendation System</h1>
-        <p>Personalized movie suggestions powered by AI + DSA.</p>
-    </header>
+<header>
+    <h1>Corporate Movie Recommendation System</h1>
+    <p>Personalized movie suggestions powered by AI + DSA.</p>
+</header>
 
-    <div class="container">
-        <h2>Get Movie Recommendations</h2>
+<div class="container">
+    <h2>Get Movie Recommendations</h2>
 
-        <!-- Collaborative Filtering -->
-        <div class="form-section">
-            <h3>Collaborative Filtering</h3>
-            <form action="/collaborative_recommend" method="POST">
-                <label for="userId">Enter Your User ID:</label>
-                <input type="number" name="userId" id="userId" required placeholder="Enter your user ID">
-                <button type="submit">Get Collaborative Recommendations</button>
-            </form>
-        </div>
-
-        <!-- Content-Based Filtering -->
-        <div class="form-section">
-            <h3>Content-Based Filtering</h3>
-            <form action="/content_recommend" method="POST">
-                <label for="movieTitle">Enter Movie Title:</label>
-                <input type="text" name="movieTitle" id="movieTitle" required placeholder="Enter a movie title">
-                <button type="submit">Get Content-Based Recommendations</button>
-            </form>
-        </div>
-
-        <!-- DSA-Based Filtering -->
-        <div class="form-section">
-            <h3>DSA-Based Recommendations</h3>
-            <form action="/dsa_recommend" method="POST">
-                <label for="movieTitleDSA">Enter Movie Title:</label>
-                <input type="text" name="movieTitleDSA" id="movieTitleDSA" required placeholder="Enter a movie title">
-                <button type="submit">Get DSA-Based Recommendations</button>
-            </form>
-        </div>
+    <div class="form-section">
+        <h3>Collaborative Filtering</h3>
+        <form action="/compare" method="POST">
+            <label for="userId">Enter Your User ID:</label>
+            <input type="number" name="userId" id="userId" required placeholder="Enter your user ID">
+            <label for="movieTitle">Enter Movie Title:</label>
+            <input type="text" name="movieTitle" id="movieTitle" required placeholder="Enter a movie title">
+            <button type="submit">Get Recommendations</button>
+        </form>
     </div>
+</div>
 
-    <footer>
-        <p>&copy; 2025 Corporate Movie Recommendation System. All rights reserved.</p>
-    </footer>
+<footer>
+    <p>&copy; 2025 Corporate Movie Recommendation System. All rights reserved.</p>
+</footer>
 </body>
 </html>
